@@ -3,6 +3,7 @@ package org.sonar.plugins.clojure;
 
 import org.sonar.api.Plugin;
 import org.sonar.plugins.clojure.language.ClojureLanguage;
+import org.sonar.plugins.clojure.language.ClojureSensor;
 import org.sonar.plugins.clojure.language.ClojureSonarWayProfile;
 import org.sonar.plugins.clojure.rules.ClojureLintRulesDefinition;
 import org.sonar.plugins.clojure.sensors.ancient.AncientSensor;
@@ -39,5 +40,6 @@ public class ClojurePlugin implements Plugin {
             context.addExtension(AncientSensor.class);
         }
         context.addExtension(ClojureProperties.getProperties());
+        context.addExtension(ClojureSensor.class);
     }
 }

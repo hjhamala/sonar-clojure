@@ -63,6 +63,6 @@ public class ClojurePluginTest {
 
     @Test
     public void testExtensionsAreIncluded() {
-        assertThat(context.getExtensions().size(), is(10));
+        assertThat(context.getExtensions().size(), is(11));
     }
 }

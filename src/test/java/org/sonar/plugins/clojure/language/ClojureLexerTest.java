@@ -45,6 +45,7 @@ public class ClojureLexerTest {
     public void lexComments() {
         assertThat(lexer.lex(";foo"), hasComment(";foo"));
         assertThat(lexer.lex("(def a);bar"), hasComment(";bar"));
+        assertThat(lexer.lex(";Here the comment is foundedaadiot"), hasComment(";Here the comment is foundedaadiot"));
     }
 
     @Test

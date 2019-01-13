@@ -104,7 +104,7 @@ public final class ClojureLexer {
     public static Lexer create() {
         return Lexer.builder()
                 .withFailIfNoChannelToConsumeOneCharacter(true)
-                .withChannel(new IdentifierAndKeywordChannel("[^0-9;\\[\\]\\]{}\\(\\)][^;\\[\\]\\]{}\\(\\)\\s]*", true, Keywords.values()))
+                .withChannel(new IdentifierAndKeywordChannel("[^0-9;\\[\\]\\]{}\\(\\)\\s][^;\\[\\]\\]{}\\(\\)\\s]*", true, Keywords.values()))
                 .withChannel(regexp(Literals.STRING, "\"([^\"\\\\]|\\\\([\"\\\\/bfnrt]|u[0-9a-fA-F]{4}))*+\""))
                 .withChannel(regexp(Literals.INTEGER, "[0-9]+"))
                 .withChannel(commentRegexp(";.*"))

@@ -25,6 +25,9 @@ public class ListTest extends ClojureRuleTest {
     public void nonEmptyList() {
         assertThat(p)
                 .matches("(a b c)")
-        .matches("(a (a) b (c (d i) )())");
+        .matches("(a (a) b (c (d i) )())")
+        .matches("  (defn bar-inside-foo\n" +
+                "    []\n" +
+                "    true)\n" );
     }
 }
