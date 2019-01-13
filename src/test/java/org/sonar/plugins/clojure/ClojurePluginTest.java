@@ -14,6 +14,7 @@ import org.sonar.plugins.clojure.language.ClojureSonarWayProfile;
 import org.sonar.plugins.clojure.rules.ClojureLintRulesDefinition;
 import org.sonar.plugins.clojure.sensors.eastwood.EastwoodSensor;
 
+
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;

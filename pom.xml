@@ -19,6 +19,18 @@
             <version>6.7.1</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.sonarsource.sslr</groupId>
+            <artifactId>sslr-testing-harness</artifactId>
+            <version>${sslr.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.sonarsource.sslr</groupId>
+            <artifactId>sslr-core</artifactId>
+            <version>${sslr.version}</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -38,8 +50,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <sslr.version>1.23</sslr.version>
     </properties>
-
     <build>
         <plugins>
             <plugin>
