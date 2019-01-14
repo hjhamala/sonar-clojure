@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -eu
-mvn clean package
+mvn clean package -Dmaven.test.skip=true
 docker build . --tag sonarcube_local_image
 if [ ! "$(docker ps -a -q -f 'name=sonarqube_local_test')" ]; then
   echo "Sonar container is not running"

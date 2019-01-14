@@ -13,6 +13,7 @@ import org.sonar.plugins.clojure.sensors.CommandRunner;
 import org.sonar.plugins.clojure.sensors.kibit.KibitSensor;
 import org.sonar.plugins.clojure.sensors.leinNvd.LeinNvdSensor;
 import org.sonar.plugins.clojure.settings.ClojureProperties;
+import org.sonar.plugins.clojure.sensors.eastwood.NativeClojureSensor;
 
 public class ClojurePlugin implements Plugin {
 

@@ -53,7 +53,11 @@ public class ClojureTest extends ClojureRuleTest {
                 .matches(readFile("src/test/resources/core.clj", UTF_8));
         String boa = readFile("src/test/resources/boa.clj", UTF_8);
 
+        assertThat(p).matches("(def char-value \\c)");
         assertThat(p).matches(boa);
+        assertThat(p).matches(":e");
+        assertThat(p).matches("(log/debug {:message \"DB violation\" :e e})");
+
     }
 
 

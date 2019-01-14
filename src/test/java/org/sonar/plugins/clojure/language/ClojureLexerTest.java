@@ -21,6 +21,7 @@ import static org.sonar.api.web.Criterion.EQ;
 import static org.sonar.plugins.clojure.language.ClojureLexer.Keywords.FALSE;
 import static org.sonar.plugins.clojure.language.ClojureLexer.Keywords.NIL;
 import static org.sonar.plugins.clojure.language.ClojureLexer.Keywords.TRUE;
+import static org.sonar.plugins.clojure.language.ClojureLexer.Literals.CHAR;
 import static org.sonar.plugins.clojure.language.ClojureLexer.Literals.INTEGER;
 import static org.sonar.plugins.clojure.language.ClojureLexer.Punctuators.*;
 
@@ -37,21 +38,11 @@ public class ClojureLexerTest {
     }
 
     @Test
-    public void testRegexp() throws IOException {
-        String regexp = readFile("src/test/resources/boa.clj", UTF_8);
-        LOG.info(regexp);
+    public void lexChar() {
 
-        assertThat(lexer.lex("abc0"), hasToken("abc0", IDENTIFIER));
-        assertThat(lexer.lex("abc_0"), hasToken("abc_0", IDENTIFIER));
-        assertThat(lexer.lex("i"), hasToken("i", IDENTIFIER));
-    }
-
-    @Test
-    public void lexString() {
-
-        assertThat(lexer.lex("abc0"), hasToken("abc0", IDENTIFIER));
-        assertThat(lexer.lex("abc_0"), hasToken("abc_0", IDENTIFIER));
-        assertThat(lexer.lex("i"), hasToken("i", IDENTIFIER));
+        assertThat(lexer.lex("\\c"), hasToken("\\c", CHAR));
+        assertThat(lexer.lex("abc \\d"), hasToken("\\d", CHAR));
+        assertThat(lexer.lex("(def char-value \\c)"), hasToken("\\c", CHAR));
     }
 
     @Test

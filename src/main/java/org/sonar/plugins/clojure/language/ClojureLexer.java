@@ -16,7 +16,7 @@ public final class ClojureLexer {
 
     public static enum Literals implements TokenType {
 
-        INTEGER,STRING,CLOJURE_KEYWORD;
+        INTEGER,STRING,CLOJURE_KEYWORD, CHAR;
 
         @Override
         public String getName() {
@@ -100,19 +100,13 @@ public final class ClojureLexer {
 
     }
 
-//    public static String identifierKeywordChannelRegex = "[^:\"0-9;\\[\\]\\]{}\\(\\)\\s][^\";\\[\\]\\]{}\\(\\)\\s]*+";
-//    public static String stringRegex = "\"([^\"\\\\]|\\\\([\"\\\\/bfnrt]|u[0-9a-fA-F]{4}))*+\"";
-//    public static String clojureKeywordRegex = ":[^;\\[\\]\\]{}\\(\\)\\s\\/]+\\/?[^\";\\[\\]\\]{}\\(\\)\\s\\/]++";
-//    public static String integerRegex = "[0-9]+";
-//    public static String commentRegexp = ";.*";
-//    public static String blackholeRegexp = "[ \n\r\t\f,]*";
-
-    public static String identifierKeywordChannelRegex = "[^:\"0-9;\\[\\]\\]{}\\(\\)\\s][^\";\\[\\]\\]{}\\(\\)\\s]*+";
-    public static String stringRegex = "\"([^\"\\\\]*+(\\\\[\\s\\S])?+)*+\"";
-    public static String clojureKeywordRegex = ":[^;\\[\\]\\]{}\\(\\)\\s\\/]+\\/?[^\";\\[\\]\\]{}\\(\\)\\s\\/]++";
-    public static String integerRegex = "[0-9]+";
-    public static String commentRegexp = ";.*";
-    public static String blackholeRegexp = "[ \n\r\t\f]+";
+    private static String identifierKeywordChannelRegex = "[^\\\\:\"0-9;\\[\\]\\]{}\\(\\)\\s][^\";\\[\\]\\]{}\\(\\)\\s]*+";
+    private static String stringRegex = "\"([^\"\\\\]*+(\\\\[\\s\\S])?+)*+\"";
+    private static String clojureKeywordRegex = ":[^;\\[\\]\\]{}\\(\\)\\s\\/]*\\/?[^\";\\[\\]\\]{}\\(\\)\\s\\/]++";
+    private static String integerRegex = "[0-9]+";
+    private static String commentRegexp = ";.*";
+    private static String blackholeRegexp = "[ \n\r\t\f]+";
+    private static String charRegexp = "\\\\.";
 
     public static Lexer create() {
         return Lexer.builder()
@@ -120,6 +114,7 @@ public final class ClojureLexer {
                 .withChannel(new IdentifierAndKeywordChannel(identifierKeywordChannelRegex, true, Keywords.values()))
                 .withChannel(regexp(Literals.STRING, stringRegex))
                 .withChannel(regexp(Literals.INTEGER, integerRegex))
+                .withChannel(regexp(Literals.CHAR, charRegexp))
                 .withChannel(regexp(Literals.CLOJURE_KEYWORD, clojureKeywordRegex))
                 .withChannel(commentRegexp(commentRegexp))
                 .withChannel(new PunctuatorChannel(Punctuators.values()))

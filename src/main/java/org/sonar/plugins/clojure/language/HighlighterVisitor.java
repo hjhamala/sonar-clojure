@@ -27,7 +27,7 @@ public class HighlighterVisitor implements AstVisitor {
     private boolean hasHightlight = false;
     private NewHighlighting highlighting;
 
-    public HighlighterVisitor(SensorContext context, InputFile input){
+    public HighlighterVisitor(SensorContext context, InputFile input) {
         this.context = context;
 
         this.input = input;
@@ -49,35 +49,41 @@ public class HighlighterVisitor implements AstVisitor {
 
     @Override
     public void leaveFile(@Nullable AstNode astNode) {
-        if (hasHightlight){
+        if (hasHightlight) {
             highlighting.save();
         }
     }
 
 
-
-    public TextRange calculateRange(Token t){
+    public TextRange calculateRange(Token t) {
         String[] lines = t.getValue().split("\\r?\\n");
         TextPointer start = new DefaultTextPointer(t.getLine(), t.getColumn());
         TextPointer end;
         int endline = t.getLine() + lines.length - 1;
 
-        if (endline == t.getLine()){
-            end = new DefaultTextPointer(t.getLine(), t.getColumn()+t.getValue().length());
+        if (endline == t.getLine()) {
+            end = new DefaultTextPointer(t.getLine(), t.getColumn() + t.getValue().length());
         } else {
             end = new DefaultTextPointer(endline, lines[lines.length - 1].length());
         }
 
-        return new DefaultTextRange(start,end);
+        return new DefaultTextRange(start, end);
     }
 
     @Override
     public void visitNode(AstNode astNode) {
-        if (astNode.hasToken()){
+        if (astNode.hasToken()) {
             Token t = astNode.getToken();
             TypeOfText type;
-            switch (t.getType().getName()){
+            switch (t.getType().getName()) {
                 case "STRING":
+                    hasHightlight = true;
+                    type = STRING;
+
+                    highlighting.highlight(calculateRange(t), type);
+                    break;
+
+                case "CHAR":
                     hasHightlight = true;
                     type = STRING;
 
@@ -91,7 +97,7 @@ public class HighlighterVisitor implements AstVisitor {
                     highlighting.highlight(calculateRange(t), type);
                     break;
                 case "IDENTIFIER":
-                    if (astNode.getPreviousAstNode().getToken().getType() == PAREN_L){
+                    if (astNode.getPreviousAstNode().getToken().getType() == PAREN_L) {
                         hasHightlight = true;
                         type = KEYWORD;
                         highlighting.highlight(calculateRange(t), type);

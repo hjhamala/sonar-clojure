@@ -46,6 +46,11 @@
             <artifactId>gson</artifactId>
             <version>2.8.4</version>
         </dependency>
+        <dependency>
+            <groupId>sonar-clojure-native-plugin</groupId>
+            <artifactId>sonar-clojure-native-plugin</artifactId>
+            <version>0.1.6-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <properties>
