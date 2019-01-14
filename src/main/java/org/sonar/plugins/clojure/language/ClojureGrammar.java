@@ -8,9 +8,8 @@ import org.sonar.sslr.grammar.GrammarRuleKey;
 import org.sonar.sslr.grammar.LexerfulGrammarBuilder;
 
 import static com.sonar.sslr.api.GenericTokenType.IDENTIFIER;
-import static org.sonar.plugins.clojure.language.ClojureLexer.Keywords.FALSE;
-import static org.sonar.plugins.clojure.language.ClojureLexer.Keywords.NIL;
-import static org.sonar.plugins.clojure.language.ClojureLexer.Keywords.TRUE;
+import static org.sonar.plugins.clojure.language.ClojureLexer.Keywords.*;
+import static org.sonar.plugins.clojure.language.ClojureLexer.Literals.CLOJURE_KEYWORD;
 import static org.sonar.plugins.clojure.language.ClojureLexer.Literals.INTEGER;
 import static org.sonar.plugins.clojure.language.ClojureLexer.Literals.STRING;
 import static org.sonar.plugins.clojure.language.ClojureLexer.Punctuators.*;
@@ -31,7 +30,7 @@ public enum ClojureGrammar implements GrammarRuleKey {
         b.rule(LIST).is(PAREN_L,  b.optional(VALUE, b.zeroOrMore(VALUE)), PAREN_R);
         b.rule(VECTOR).is(SQUARE_BRACE_L, b.optional(VALUE, b.zeroOrMore(VALUE)), SQUARE_BRACE_R);
 
-        b.rule(VALUE).is(b.firstOf(IDENTIFIER,STRING,INTEGER, MAP, VECTOR, LIST, TRUE, FALSE, NIL));
+        b.rule(VALUE).is(b.firstOf(IDENTIFIER,STRING,INTEGER, MAP, VECTOR, LIST, TRUE, FALSE, NIL, CLOJURE_KEYWORD));
         b.rule(CLOJURE).is(b.zeroOrMore(VALUE));
 
         return b.build();

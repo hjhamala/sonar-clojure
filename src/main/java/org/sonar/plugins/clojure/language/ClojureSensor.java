@@ -47,8 +47,9 @@ public class ClojureSensor implements Sensor {
         try {
             LinesOfCodeVisitor codeVisitor = new LinesOfCodeVisitor();
             CommentLineCalculator calculator = new CommentLineCalculator(inputFile.contents());
+            HighlighterVisitor highlight = new HighlighterVisitor(context,inputFile);
 
-            AstWalker walker = new AstWalker(codeVisitor);
+            AstWalker walker = new AstWalker(codeVisitor,highlight);
 
             walker.walkAndVisit(p.parse(inputFile.contents()));
             Set<Integer> linesWithCode = codeVisitor.getLinesOfCode();

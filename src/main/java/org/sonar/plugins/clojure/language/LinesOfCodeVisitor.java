@@ -41,7 +41,6 @@ public class LinesOfCodeVisitor implements AstVisitor {
 
     @Override
     public void visitNode(AstNode astNode) {
-        LOG.debug(astNode.getToken().getType().getName() + " : " +  astNode.getTokenValue());
         linesOfCode.add(astNode.getTokenLine());
     }
 

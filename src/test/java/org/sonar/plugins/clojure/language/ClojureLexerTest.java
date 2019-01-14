@@ -2,11 +2,20 @@ package org.sonar.plugins.clojure.language;
 
 import com.sonar.sslr.impl.Lexer;
 import org.junit.Test;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.regex.Pattern;
 
 import static com.sonar.sslr.api.GenericTokenType.IDENTIFIER;
 import static com.sonar.sslr.test.lexer.LexerMatchers.hasComment;
 import static com.sonar.sslr.test.lexer.LexerMatchers.hasToken;
 import static com.sonar.sslr.test.minic.MiniCLexer.Punctuators.SEMICOLON;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.junit.Assert.assertThat;
 import static org.sonar.api.web.Criterion.EQ;
 import static org.sonar.plugins.clojure.language.ClojureLexer.Keywords.FALSE;
@@ -17,7 +26,33 @@ import static org.sonar.plugins.clojure.language.ClojureLexer.Punctuators.*;
 
 public class ClojureLexerTest {
 
+    private static final Logger LOG = Loggers.get(ClojureLexerTest.class);
     Lexer lexer = ClojureLexer.create();
+
+    static String readFile(String path, Charset encoding)
+            throws IOException
+    {
+        byte[] encoded = Files.readAllBytes(Paths.get(path));
+        return new String(encoded, encoding);
+    }
+
+    @Test
+    public void testRegexp() throws IOException {
+        String regexp = readFile("src/test/resources/boa.clj", UTF_8);
+        LOG.info(regexp);
+
+        assertThat(lexer.lex("abc0"), hasToken("abc0", IDENTIFIER));
+        assertThat(lexer.lex("abc_0"), hasToken("abc_0", IDENTIFIER));
+        assertThat(lexer.lex("i"), hasToken("i", IDENTIFIER));
+    }
+
+    @Test
+    public void lexString() {
+
+        assertThat(lexer.lex("abc0"), hasToken("abc0", IDENTIFIER));
+        assertThat(lexer.lex("abc_0"), hasToken("abc_0", IDENTIFIER));
+        assertThat(lexer.lex("i"), hasToken("i", IDENTIFIER));
+    }
 
     @Test
     public void lexIdentifiers() {

@@ -27,7 +27,7 @@ public class AncientOutputParser {
     }
 
     public static List<OutdatedDependency> parse(List<String> output){
-        LOG.debug(output.get(0));
+
         return output.stream()
                 .map(e -> e.replaceAll("\u001B\\[[;\\d]*m", ""))
                 .filter(AncientOutputParser::removeNonMatches)

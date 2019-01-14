@@ -78,8 +78,7 @@ public class LeinNvdSensor implements Sensor {
 
         for (Vulnerability v :
                 vulnerabilities) {
-            LOG.debug("Processing vulnerability");
-            LOG.debug(v.toString());
+            LOG.debug("Processing vulnerability: " +v.toString());
             RuleKey ruleKey = RuleKey.of(ClojureLintRulesDefinition.REPOSITORY_KEY, "nvd-" + v.getSeverity().toLowerCase());
             NewIssue newIssue = context.newIssue().forRule(ruleKey);
             NewIssueLocation primaryLocation = newIssue

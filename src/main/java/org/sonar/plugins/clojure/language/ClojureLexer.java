@@ -16,7 +16,7 @@ public final class ClojureLexer {
 
     public static enum Literals implements TokenType {
 
-        INTEGER,STRING;
+        INTEGER,STRING,CLOJURE_KEYWORD;
 
         @Override
         public String getName() {
@@ -65,7 +65,6 @@ public final class ClojureLexer {
     }
 
     public static enum Keywords implements TokenType {
-
         TRUE("true"),
         FALSE("false"), NIL("nil");
 
@@ -101,15 +100,30 @@ public final class ClojureLexer {
 
     }
 
+//    public static String identifierKeywordChannelRegex = "[^:\"0-9;\\[\\]\\]{}\\(\\)\\s][^\";\\[\\]\\]{}\\(\\)\\s]*+";
+//    public static String stringRegex = "\"([^\"\\\\]|\\\\([\"\\\\/bfnrt]|u[0-9a-fA-F]{4}))*+\"";
+//    public static String clojureKeywordRegex = ":[^;\\[\\]\\]{}\\(\\)\\s\\/]+\\/?[^\";\\[\\]\\]{}\\(\\)\\s\\/]++";
+//    public static String integerRegex = "[0-9]+";
+//    public static String commentRegexp = ";.*";
+//    public static String blackholeRegexp = "[ \n\r\t\f,]*";
+
+    public static String identifierKeywordChannelRegex = "[^:\"0-9;\\[\\]\\]{}\\(\\)\\s][^\";\\[\\]\\]{}\\(\\)\\s]*+";
+    public static String stringRegex = "\"([^\"\\\\]*+(\\\\[\\s\\S])?+)*+\"";
+    public static String clojureKeywordRegex = ":[^;\\[\\]\\]{}\\(\\)\\s\\/]+\\/?[^\";\\[\\]\\]{}\\(\\)\\s\\/]++";
+    public static String integerRegex = "[0-9]+";
+    public static String commentRegexp = ";.*";
+    public static String blackholeRegexp = "[ \n\r\t\f]+";
+
     public static Lexer create() {
         return Lexer.builder()
                 .withFailIfNoChannelToConsumeOneCharacter(true)
-                .withChannel(new IdentifierAndKeywordChannel("[^0-9;\\[\\]\\]{}\\(\\)\\s][^;\\[\\]\\]{}\\(\\)\\s]*", true, Keywords.values()))
-                .withChannel(regexp(Literals.STRING, "\"([^\"\\\\]|\\\\([\"\\\\/bfnrt]|u[0-9a-fA-F]{4}))*+\""))
-                .withChannel(regexp(Literals.INTEGER, "[0-9]+"))
-                .withChannel(commentRegexp(";.*"))
+                .withChannel(new IdentifierAndKeywordChannel(identifierKeywordChannelRegex, true, Keywords.values()))
+                .withChannel(regexp(Literals.STRING, stringRegex))
+                .withChannel(regexp(Literals.INTEGER, integerRegex))
+                .withChannel(regexp(Literals.CLOJURE_KEYWORD, clojureKeywordRegex))
+                .withChannel(commentRegexp(commentRegexp))
                 .withChannel(new PunctuatorChannel(Punctuators.values()))
-                .withChannel(new BlackHoleChannel("[ \n\r\t\f,]*+"))
+            .withChannel(new BlackHoleChannel(blackholeRegexp))
                 .build();
     }
 
