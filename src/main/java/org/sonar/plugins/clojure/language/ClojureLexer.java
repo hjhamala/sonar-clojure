@@ -1,10 +1,15 @@
 package org.sonar.plugins.clojure.language;
 import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.Token;
 import com.sonar.sslr.api.TokenType;
 import com.sonar.sslr.impl.Lexer;
 import com.sonar.sslr.impl.channel.BlackHoleChannel;
 import com.sonar.sslr.impl.channel.IdentifierAndKeywordChannel;
 import com.sonar.sslr.impl.channel.PunctuatorChannel;
+import org.sonar.sslr.channel.Channel;
+import org.sonar.sslr.channel.CodeReader;
+
+import java.security.Key;
 
 import static com.sonar.sslr.impl.channel.RegexpChannelBuilder.commentRegexp;
 import static com.sonar.sslr.impl.channel.RegexpChannelBuilder.regexp;
@@ -102,11 +107,31 @@ public final class ClojureLexer {
 
     private static String identifierKeywordChannelRegex = "[^\\\\:\"0-9;\\[\\]\\]{}\\(\\)\\s][^\";\\[\\]\\]{}\\(\\)\\s]*+";
     private static String stringRegex = "\"([^\"\\\\]*+(\\\\[\\s\\S])?+)*+\"";
-    private static String clojureKeywordRegex = ":[^;\\[\\]\\]{}\\(\\)\\s\\/]*\\/?[^\";\\[\\]\\]{}\\(\\)\\s\\/]++";
+    private static String clojureKeywordRegex = ":([^;\\[\\]\\]{}\\(\\)\\s\\/\\\"])*\\/?[^;\\[\\]\\]{}\\(\\)\\s\\/\\\"]+";
     private static String integerRegex = "[0-9]+";
     private static String commentRegexp = ";.*";
     private static String blackholeRegexp = "[ \n\r\t\f]+";
     private static String charRegexp = "\\\\.";
+
+    private  class ClojureKeywordChannel extends Channel<Lexer> {
+
+        @Override
+        public boolean consume(CodeReader codeReader, Lexer lexer) {
+            if (codeReader.peek(1)[0] == ':'){
+
+
+//                Token token =  Token.builder()
+//                        .setType(Literals.CLOJURE_KEYWORD)
+//                        .setValueAndOriginalValue(value)
+//                        .setURI(lexer.getURI())
+//                        .setLine(code.getPreviousCursor().getLine())
+//                        .setColumn(code.getPreviousCursor().getColumn())
+//                        .build();
+
+            }
+            return false;
+        }
+    }
 
     public static Lexer create() {
         return Lexer.builder()

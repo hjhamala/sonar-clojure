@@ -21,8 +21,7 @@ import static org.sonar.api.web.Criterion.EQ;
 import static org.sonar.plugins.clojure.language.ClojureLexer.Keywords.FALSE;
 import static org.sonar.plugins.clojure.language.ClojureLexer.Keywords.NIL;
 import static org.sonar.plugins.clojure.language.ClojureLexer.Keywords.TRUE;
-import static org.sonar.plugins.clojure.language.ClojureLexer.Literals.CHAR;
-import static org.sonar.plugins.clojure.language.ClojureLexer.Literals.INTEGER;
+import static org.sonar.plugins.clojure.language.ClojureLexer.Literals.*;
 import static org.sonar.plugins.clojure.language.ClojureLexer.Punctuators.*;
 
 public class ClojureLexerTest {
@@ -54,12 +53,30 @@ public class ClojureLexerTest {
     }
 
     @Test
+    public void lexKeyword() {
+        assertThat(lexer.lex(":a"), hasToken(":a", CLOJURE_KEYWORD));
+        assertThat(lexer.lex(":aa"), hasToken(":aa", CLOJURE_KEYWORD));
+        assertThat(lexer.lex(":aa/b"), hasToken(":aa/b", CLOJURE_KEYWORD));
+        assertThat(lexer.lex(":aa/bs\"b\""), hasToken(":aa/bs", CLOJURE_KEYWORD));
+        assertThat(lexer.lex("::a/b"), hasToken("::a/b", CLOJURE_KEYWORD));
+        assertThat(lexer.lex(":a\"a\""), hasToken(":a", CLOJURE_KEYWORD));
+    }
+
+
+    @Test
     public void lexIntegers() {
         assertThat(lexer.lex("0"), hasToken("0", INTEGER));
         assertThat(lexer.lex("000"), hasToken("000", INTEGER));
         assertThat(lexer.lex("1234"), hasToken("1234", INTEGER));
     }
 
+
+    @Test
+    public void lexStrings() {
+        assertThat(lexer.lex("\"MIIDBTCCAe2gAwIBAgIQev76BWqjWZxChmKkGqoAfDANBgkqhkiG9w0BAQsFADAtMSswKQYDVQQDEyJhY2NvdW50cy5hY2Nlc3Njb250cm9sLndpbmRvd3MubmV0MB4XDTE4MDIxODAwMDAwMFoXDTIwMDIxOTAwMDAwMFowLTErMCkGA1UEAxMiYWNjb3VudHMuYWNjZXNzY29udHJvbC53aW5kb3dzLm5ldDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAMgmGiRfLh6Fdi99XI2VA3XKHStWNRLEy5Aw/gxFxchnh2kPdk/bejFOs2swcx7yUWqxujjCNRsLBcWfaKUlTnrkY7i9x9noZlMrijgJy/Lk+HH5HX24PQCDf+twjnHHxZ9G6/8VLM2e5ZBeZm+t7M3vhuumEHG3UwloLF6cUeuPdW+exnOB1U1fHBIFOG8ns4SSIoq6zw5rdt0CSI6+l7b1DEjVvPLtJF+zyjlJ1Qp7NgBvAwdiPiRMU4l8IRVbuSVKoKYJoyJ4L3eXsjczoBSTJ6VjV2mygz96DC70MY3avccFrk7tCEC6ZlMRBfY1XPLyldT7tsR3EuzjecSa1M8CAwEAAaMhMB8wHQYDVR0OBBYEFIks1srixjpSLXeiR8zES5cTY6fBMA0GCSqGSIb3DQEBCwUAA4IBAQCKthfK4C31DMuDyQZVS3F7+4Evld3hjiwqu2uGDK+qFZas/D/eDunxsFpiwqC01RIMFFN8yvmMjHphLHiBHWxcBTS+tm7AhmAvWMdxO5lzJLS+UWAyPF5ICROe8Mu9iNJiO5JlCo0Wpui9RbB1C81Xhax1gWHK245ESL6k7YWvyMYWrGqr1NuQcNS0B/AIT1Nsj1WY7efMJQOmnMHkPUTWryVZlthijYyd7P2Gz6rY5a81DAFqhDNJl2pGIAE6HWtSzeUEh3jCsHEkoglKfm4VrGJEuXcALmfCMbdfTvtu4rlsaP2hQad+MG/KJFlenoTK34EMHeBPDCpqNDz8UVNk\""), hasToken(STRING));
+        assertThat(lexer.lex(":a\"a\""), hasToken("\"a\"", STRING));
+
+    }
     @Test
     public void lexKeywords() {
         assertThat(lexer.lex("true"), hasToken(TRUE));
