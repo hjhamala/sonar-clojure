@@ -1,7 +1,6 @@
 package org.sonar.plugins.clojure.sensors.eastwood;
 
 import org.sonar.plugins.clojure.sensors.CommandStreamConsumer;
-import org.sonar.plugins.clojure.sensors.Issue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,7 @@ public class EastwoodIssueParser {
     public static String parseRuntimeInfo(CommandStreamConsumer output) {
         if (output != null) {
             List<String> lines = output.getData();
-            if (lines.size() > 0) {
+            if (!lines.isEmpty()) {
                 // Remove the "== " prefix in eastwood's output
                 return lines.get(0).substring(3);
             }
@@ -24,8 +23,8 @@ public class EastwoodIssueParser {
         return null;
     }
 
-    public static List<Issue> parse(CommandStreamConsumer output) {
-        List<Issue> issues = new ArrayList<>();
+    public static List<EastwoodIssue> parse(CommandStreamConsumer output) {
+        List<EastwoodIssue> eastwoodIssues = new ArrayList<>();
 
         if (output != null) {
             for (String line : output.getData()) {
@@ -37,11 +36,11 @@ public class EastwoodIssueParser {
                     String filePath = matcher.group(1);
                     int lineNumber = Integer.parseInt(matcher.group(2));
 
-                    issues.add(new Issue(externalRuleId, description, filePath, lineNumber));
+                    eastwoodIssues.add(new EastwoodIssue(externalRuleId, description, filePath, lineNumber));
                 }
             }
         }
 
-        return issues;
+        return eastwoodIssues;
     }
 }
